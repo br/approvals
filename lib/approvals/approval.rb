@@ -62,7 +62,7 @@ module Approvals
       diff_index =
           approved.each_char.with_index.find_index do |approved_char, i|
             approved_char != received[i]
-          end
+          end || approved.length
       "approved fragment: #{approved[diff_index - 10 .. diff_index + 30]}\n"+
       "received fragment: #{received[diff_index - 10 .. diff_index + 30]}"
     end
