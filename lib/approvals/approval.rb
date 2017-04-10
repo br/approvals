@@ -10,6 +10,7 @@ module Approvals
       @subject = subject
       @namer = options[:namer] || default_namer(options[:name])
       @format = options[:format] || identify_format
+      @writer_options = options.slice :excluded_json_keys
     end
 
     def default_namer(name)
@@ -31,7 +32,7 @@ module Approvals
     end
 
     def writer
-      @writer ||= Writer.for(@format)
+      @writer ||= Writer.for(@format).new(@writer_options)
     end
 
     def verify

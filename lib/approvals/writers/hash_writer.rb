@@ -10,8 +10,8 @@ module Approvals
         "{\n#{lines}\n}\n"
       end
 
-      def filter data
-        filter = ::Approvals::Filter.new(Approvals.configuration.excluded_json_keys)
+      def filter(data)
+        filter = ::Approvals::Filter.new @options[:excluded_json_keys]
         filter.apply(data)
       end
 

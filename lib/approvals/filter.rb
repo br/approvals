@@ -4,10 +4,10 @@ module Approvals
 
     def initialize(filters)
       @filters = filters
-      @placeholder = {}
+      @paths_cache = {}
     end
 
-    def apply hash_or_array
+    def apply(hash_or_array)
       if @filters.any?
         censored(hash_or_array)
       else
@@ -15,31 +15,35 @@ module Approvals
       end
     end
 
-    def censored value, key=nil
+    def censored(value, path=nil)
       if value.nil?
         nil
-      elsif key && placeholder_for(key)
-        "<#{placeholder_for(key)}>"
+      elsif path && filtered?(path)
+        "<filtered value>"
       else
         case value
           when Array
             value.map { |item| censored(item) }
           when Hash
-            Hash[value.map { |inner_key, inner_value| [inner_key, censored(inner_value, inner_key)] }]
+            pairs = value.map do |inner_key, inner_value|
+              [inner_key, censored(inner_value, "#{path}:#{inner_key}")]
+            end
+            Hash[pairs]
           else
             value
         end
       end
     end
 
-    def placeholder_for key
-      return @placeholder[key] if @placeholder.key? key
+    def filtered?(path)
+      return @paths_cache[path] if @paths_cache.key? path
 
-      applicable_filters = filters.select do |placeholder, pattern|
-        pattern && key.match(pattern)
+      filters.each do |filter|
+        next unless path.match(filter)
+        @paths_cache[path] = true
+        return true
       end
-
-      @placeholder[key] = applicable_filters.keys.last
+      @paths_cache[path] = false
     end
   end
 end

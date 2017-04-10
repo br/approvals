@@ -1,21 +1,31 @@
 module Approvals
   module Writers
-    class TextWriter
-      def extension
-        'txt'
-      end
+  end
+end
 
-      def write(data, path)
-        FileUtils.mkdir_p(File.dirname(path))
-        File.open(path, 'w') do |f|
-          f.write format(data)
-        end
-      end
+class Approvals::Writers::TextWriter
 
-      def format(data)
-        data.to_s
-      end
+  def initialize(options)
+    @options = options
+  end
 
+  def extension
+    'txt'
+  end
+
+  def write(data, path)
+    FileUtils.mkdir_p(File.dirname(path))
+    File.open(path, 'w') do |f|
+      f.write format(data)
     end
   end
+
+  def format(data)
+    data.to_s
+  end
+
+  def filter(data)
+    data
+  end
+
 end
