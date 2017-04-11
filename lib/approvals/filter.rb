@@ -3,7 +3,7 @@ module Approvals
     attr_reader :filters
 
     def initialize(filters)
-      @filters = filters
+      @filters = filters || []
       @paths_cache = {}
     end
 
