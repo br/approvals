@@ -49,23 +49,25 @@ module Approvals
       @approved_content, @received_content = read_content
 
       unless received_matches?
-        fail_with "Received file does not match approved:\n"+
-          "#{received_path}\n#{approved_path}\n#{diff_preview}"
+        load_diff_preview
+        fail_with "Received file does not match approved; line #{@diff_line}:\n"+
+          "#{received_path}\n#{approved_path}\n#{@diff_preview}"
       end
 
       success!
     end
 
-    def diff_preview
-      approved, received, line_number = diff_lines
+    def load_diff_preview
+      approved, received, @diff_line = diff_lines
       return unless approved and received
       diff_index =
           approved.each_char.with_index.find_index do |approved_char, i|
             approved_char != received[i]
           end || approved.length
       from, to = [diff_index - 10, 0].max, diff_index + 30
-      "approved fragment: #{approved[from .. to]}\n"+
-      "received fragment: #{received[from .. to]}"
+      @diff_preview =
+        "approved fragment: #{approved[from .. to]}\n"+
+        "received fragment: #{received[from .. to]}"
     end
 
     def diff_lines
