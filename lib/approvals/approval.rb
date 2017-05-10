@@ -57,21 +57,22 @@ module Approvals
     end
 
     def diff_preview
-      approved, received = diff_lines
+      approved, received, line_number = diff_lines
       return unless approved and received
       diff_index =
           approved.each_char.with_index.find_index do |approved_char, i|
             approved_char != received[i]
           end || approved.length
-      "approved fragment: #{approved[diff_index - 10 .. diff_index + 30]}\n"+
-      "received fragment: #{received[diff_index - 10 .. diff_index + 30]}"
+      from, to = [diff_index - 10, 0].max, diff_index + 30
+      "approved fragment: #{approved[from .. to]}\n"+
+      "received fragment: #{received[from .. to]}"
     end
 
     def diff_lines
       approved = @approved_content.split("\n")
       received = @received_content.split("\n")
       approved.each_with_index do |line, i|
-        return line, received[i] unless line == received[i]
+        return line, received[i], i unless line == received[i]
       end
     end
 
