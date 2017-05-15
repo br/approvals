@@ -74,7 +74,7 @@ module Approvals
       approved = @approved_content.split("\n")
       received = @received_content.split("\n")
       approved.each_with_index do |line, i|
-        return line, received[i], i unless line == received[i]
+        return line, received[i], (i+1) unless line == received[i]
       end
     end
 
