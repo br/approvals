@@ -15,6 +15,14 @@ Big hat tip to Llewellyn Falco who developed the approvals concept, as
 well as the original approvals libraries (.NET, Java, Ruby, PHP,
 probably others).
 
+While running specs, if changes detected you will see:
+
+![screen shot 2017-10-03 at 3 55 32 pm](https://user-images.githubusercontent.com/2452269/31126184-8c62c87c-a853-11e7-8877-28e2601d72b7.png)
+
+Then inspect difference with `approvals verify -d ksdiff` (in this example used text diff application "Kaleidoscope"):
+
+![screen shot 2017-07-12 at 6 26 21 pm](https://user-images.githubusercontent.com/2452269/31126172-8645abf8-a853-11e7-958a-337a77defce9.png)
+
 See [ApprovalTests](http://www.approvaltests.com) for videos and additional documentation about the general concept.
 
 Also, check out  Herding Code's [podcast #117](http://t.co/GLn88R5) in
